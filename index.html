@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="/images/tnt_logo.png">
+    <title>ExplosiveGrammar</title>
+    <!-- Linking internal css file -->
+    <link rel="stylesheet" href="styles/style.css" />
+</head>
+<body>
+    <!-- Main Menu -->
+    <section id="mainMenu" class="screen">
+
+        <img src="images/ui_elements/explosive_grammar_logo.png" alt="Logo" id="logoImg">
+
+        <p class="credits">Credits: 0</p>
+
+        <img src="images/ui_elements/dynamite_button.png" class="dynamite-button-1">
+        <div class="fire-btn-wrapper wrapper1">
+            <button class="transparent-btn" onclick="goToLevelSelection()">PLAY</button>
+            <div class="fire-container"></div>
+        </div>
+
+        <img src="images/ui_elements/dynamite_button.png" class="dynamite-button-2">
+        <div class="fire-btn-wrapper wrapper2">
+            <button id="openShopBtn" class="transparent-btn" onclick="showShopOverlay()">SHOP</button>
+            <div class="fire-container"></div>
+        </div>
+
+        <img src="images/ui_elements/dynamite_button.png" class="dynamite-button-3">
+        <div class="fire-btn-wrapper wrapper3">
+            <button class="transparent-btn" onclick="showShareOverlay()">SHARE</button>
+            <div class="fire-container"></div>
+        </div>
+
+        <div class="dropdown">
+            <button class="dropdown-btn" id="dropdownBtn">Tenses</button>
+            <div class="dropdown-menu" id="dropdownMenu">
+                <button class="dropdown-item" onclick="setCategory('Tenses')">Tenses</button>
+                <button class="dropdown-item" onclick="setCategory('Articles')">Articles</button>
+                <button class="dropdown-item" onclick="setCategory('Prepositions')">Prepositions</button>
+                <button class="dropdown-item" onclick="setCategory('Conditionals')">Conditionals</button>
+                <button class="dropdown-item" onclick="setCategory('Pronouns')">Pronouns</button>
+            </div>
+        </div>
+
+        <img src="images/ui_elements/pick_a_category.png" id="pick_category">
+
+        <!-- SHOP OVERLAY -->
+        <div class="custom-overlay" id="shopOverlay">
+            <div class="custom-modal shop-modal">
+                <div class="custom-modal-header">
+                    <h2 class="custom-modal-title">Item Shop</h2>
+                    <button class="custom-close-btn" data-overlay="shopOverlay">&times;</button>
+                </div>
+                <div class="shop-tabs">
+                    <div class="tab active" data-tab="cursors">Cursors</div>
+                    <div class="tab" data-tab="gameplay">Gameplay</div>
+                </div>
+                <div class="items-container" id="itemsContainer"></div>
+            </div>
+        </div>
+
+        <div class="insufficient-funds" id="insufficientFunds">Insufficient funds!</div>
+
+        <!-- SHARE OVERLAY -->
+        <div class="custom-overlay" id="shareOverlay">
+            <div class="custom-modal share-modal">
+                <div class="custom-modal-header">
+                    <h2 class="custom-modal-title">Choose a platform</h2>
+                    <button class="custom-close-btn" data-overlay="shareOverlay">&times;</button>
+                </div>
+                <div class="platforms">
+                    <button class="platform-btn" onclick="shareOnFacebook()">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg" alt="Facebook">
+                    </button>
+                    <button class="platform-btn" onclick="shareOnTwitter()">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6f/Logo_of_Twitter.svg" alt="Twitter/X">
+                    </button>
+                    <button class="platform-btn" onclick="shareOnWhatsApp()">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp">
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="fire-btn-wrapper wrapper4">
+            <button class="transparent-btn reset-btn" onclick="showResetOverlay()">RESET PROGRESS</button>
+        </div>
+
+        <!-- ARE YOU SURE YOU WANT TO RESET ALL PROGRESS OVERLAY -->
+        <div class="custom-overlay" id="resetOverlay">
+            <div class="custom-modal quit-modal">
+                <div class="custom-modal-header">
+                    <h2 class="custom-modal-title">Are you sure you want to reset ALL progress?</h2>
+                    <button class="custom-close-btn" data-overlay="resetOverlay">&times;</button>
+                </div>
+
+                <div class="options">
+                    <button class="option-btn option-1" onclick="resetAllProgress()">
+                        <p>YES</p>
+                    </button>
+                    <button class="option-btn option-2" onclick="hideResetOverlay()">
+                        <p>NO</p>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- Level Selection Screen -->
+    <section id="levelSelection" class="screen hidden">
+
+        <p class="credits">Credits: 0</p>
+
+        <button class="circle-btn btn1" data-level="1" onclick="startQuiz(1)">1</button>
+
+        <img src="images/ui_elements/locked.png" id="lock-2" class="lock shown" alt="locked">
+        <img src="images/ui_elements/unlocked.png" id="unlock-2" class="unlock-icon" alt="unlock" style="display: none;">
+        <button class="circle-btn btn2" data-level="2" onclick="startQuiz(2)">2</button>
+
+        <img src="images/ui_elements/locked.png" id="lock-3" class="lock shown" alt="locked">
+        <img src="images/ui_elements/unlocked.png" id="unlock-3" class="unlock-icon" alt="unlock" style="display: none;">
+        <button class="circle-btn btn3" data-level="3" onclick="startQuiz(3)">3</button>
+
+        <img src="images/ui_elements/locked.png" id="lock-4" class="lock shown" alt="locked">
+        <img src="images/ui_elements/unlocked.png" id="unlock-4" class="unlock-icon" alt="unlock" style="display: none;">
+        <button class="circle-btn btn4" data-level="4" onclick="startQuiz(4)">4</button>
+
+        <img src="images/ui_elements/locked.png" id="lock-5" class="lock shown" alt="locked">
+        <img src="images/ui_elements/unlocked.png" id="unlock-5" class="unlock-icon" alt="unlock" style="display: none;">
+        <button class="circle-btn btn5" data-level="5" onclick="startQuiz(5)">5</button>
+
+        
+        <h2 id="categoryTitle">Category</h2>
+
+        <div class="trophy-container">
+            <div id="light-rays-container" class="light-rays-container hidden"></div>
+            <img id="trophyImg" class="hidden">
+        </div>
+
+        <a id="goToMainMenu" onclick="goToMainMenu()">Back to Main Menu</a>
+
+    </section>
+
+    <!-- Quiz Screen -->
+    <section id="quizScreen" class="screen hidden">
+
+        <div id="timerWrapper">
+            <img src="images/ui_elements/clock.png" alt="clock" id="clock">
+            <p id="timerDisplay">20s</p>
+        </div>
+
+        <h2 id="quizTitle">Quiz</h2>
+
+        <p class="credits">Credits: 0</p>
+
+        <div id="hearts"></div>
+
+        <div id="bombWrapper">
+            <img src="images/ui_elements/bomb.png" alt="bomb image" id="bombImage" class="bombImage">
+            <p id="questionText">Question will appear here</p>
+
+            <div id="submitAnswerButtons">
+                <button onclick="submitAnswer('A')">Option A</button>
+                <button onclick="submitAnswer('B')">Option B</button>
+                <button onclick="submitAnswer('C')">Option C</button>
+                <button onclick="submitAnswer('D')">Option D</button>
+            </div>
+        </div>
+
+        <a id="goToLevelSelection" onclick="showQuitOverlay()">Back to Level Selection</a>
+
+        <p id="quizProgress">0/0</p>
+
+        <!-- ARE YOU SURE YOU WANT TO QUIT OVERLAY -->
+        <div class="custom-overlay" id="quitOverlay">
+            <div class="custom-modal quit-modal">
+                <div class="custom-modal-header">
+                    <h2 class="custom-modal-title">Are you sure you want to quit?</h2>
+                    <button class="custom-close-btn" data-overlay="quitOverlay">&times;</button>
+                </div>
+
+                <div class="options">
+                    <button class="option-btn option-1" onclick="goToLevelSelection(currentCategory)">
+                        <p>YES</p>
+                    </button>
+                    <button class="option-btn option-2" onclick="hideQuitOverlay()">
+                        <p>NO</p>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- YOU WIN OVERLAY -->
+        <div class="custom-overlay" id="winOverlay">
+            <div class="custom-modal win-modal">
+                <div class="custom-modal-header">
+                    <h2 class="custom-modal-title">You win!</h2>
+                </div>
+
+                <div class="options">
+                    <button class="option-btn option-1" onclick="goToLevelSelection(currentCategory)">
+                        <p>AWESOME</p>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- Game over -->
+    <section id="gameOver" class="screen hidden">
+
+        <h2 id="gameOverText">Game over</h2>
+        <a id="goToMainMenu" onclick="goToMainMenu()">Back to Main Menu</a>
+
+    </section>
+
+    <!-- Internal script -->
+    <script src="scripts/index.js"></script>
+    <!-- Firebase script -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-app.js";
+        import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/12.0.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBVWifJSHJfLxRzA3ALbWhnJOlrtHHdXvQ",
+            authDomain: "explosivegrammar.firebaseapp.com",
+            projectId: "explosivegrammar",
+            storageBucket: "explosivegrammar.firebasestorage.app",
+            messagingSenderId: "497507500961",
+            appId: "1:497507500961:web:28bb82311395583cd3c1e0",
+            measurementId: "G-72SYD8MG95"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        let questions = {};
+
+            async function fetchAllQuestions() {
+                const categoryDocs = ['Tenses', 'Articles','Prepositions','Conditionals','Pronouns'];
+                for (const category of categoryDocs) {
+                    const docSnap = await getDoc(doc(db, "questions", category));
+                    if (docSnap.exists()) {
+                        questions[category] = docSnap.data();
+                    } else {
+                        console.log(`Category ${category} not found.`);
+                    }
+                }
+                console.log('Questions loaded from Firestore!');
+                return questions;
+            }
+
+        window.addEventListener('DOMContentLoaded', async () => {
+            fetchAllQuestions();
+        });
+
+        window.questions = questions;
+        window.fetchAllQuestions = fetchAllQuestions;
+    </script>
+</body>
+</html>
