@@ -190,18 +190,24 @@ body {
 
 /* Reset button */
 .wrapper4 {
-    position: absolute;
-    bottom: 10px;
-    left: 10px;
+    grid-column: 1;
+    grid-row: 4;
+    justify-items: center;
+    align-items: center;
 }
 
 .reset-btn {
-    width: 70%;
-    font-size: 1.5rem;
+    width:auto;
+    font-size: 1vw;
     -webkit-text-stroke-width: 1px;
     -webkit-text-stroke-color: black;
     background: rgba(0, 0, 0, 0.5);
+    padding: 0.9em 0.6em;
     border-radius: 30px;
+    
+    bottom: 0px;
+    left: 0px;
+    box-sizing: border-box;
 }
 
 .fire-container {
