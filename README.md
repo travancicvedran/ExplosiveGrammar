@@ -9,7 +9,7 @@ A web app for learning English grammar with a fun twist. Defuse bombs by answeri
 
 ## 🕹 Try it out!
 
-You can play the game right now, [right here](https://travancicvedran.github.io/DiplomskiRad).
+You can play the game right now, [right here](https://travancicvedran.github.io/ExplosiveGrammar).
 
 
 ## 📃 Info
