@@ -414,18 +414,18 @@ body {
 
 .custom-modal-title {
     margin: 0;
-    font-size: 24px;
+    font-size: 3vh;
     user-select: none;
 }
 
 .custom-close-btn {
     position: absolute;
-    top: 15px;
-    right: 15px;
+    top: 1vh;
+    right: 1vw;
     background: none;
     border: none;
     color: white;
-    font-size: 24px;
+    font-size: 3vh;
     border-radius: 100%;
 }
 
@@ -444,19 +444,23 @@ body {
 .share-modal {
     height: 20%;
     min-height: fit-content;
+    padding-bottom: 15px;
 }
 .platforms, .options {
     display: flex;
     gap: 9vw;
     margin: auto;
+    transform: translateY(5px);
 }
 
 .platform-btn, .option-btn {
     background: white;
     border: none;
     border-radius: 50%;
-    width: 70px;
-    height: 70px;
+    width: 7vw;
+    height: 7vw;
+    max-width: 70px;
+    max-height: 70px;
     transition: transform 0.2s, box-shadow 0.2s;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
     display: flex;
@@ -470,9 +474,11 @@ body {
 }
 
 .platform-btn img {
-    width: 40px;
-    height: 40px;
+    width: 70%;
+    height: 70%;
     object-fit: contain;
+    max-width: 40px;
+    max-height: 40px;
 }
 
 /* Shop */
@@ -487,6 +493,7 @@ body {
     padding: 12px 20px;
     flex: 1;
     text-align: center;
+    font-size: 3vh;
     font-weight: 600;
     color: darkgrey;
 }
@@ -499,10 +506,10 @@ body {
 
 .items-container {
     padding: 20px;
-    overflow-y: scroll; /* Enable vertical scrolling */
+    overflow-y: scroll;
     display: grid;
-    grid-template-columns: repeat(3, 230px);
-    gap: 20px;
+    grid-template-columns: repeat(3, 33%);
+    row-gap: 10px;
     height: 400px;
     min-height: 400px;
     justify-content: center;
@@ -524,7 +531,7 @@ body {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     height: 220px;
     box-sizing: border-box;
-    width: 230px;
+    width: 90%;
 }
 
 .item-card:hover {
@@ -534,7 +541,7 @@ body {
 
 .item-title {
     margin: 0 0 10px 0;
-    font-size: 16px;
+    font-size: 2vh;
     font-weight: 600;
     color: #2c3e50;
 }

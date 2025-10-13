@@ -15,6 +15,8 @@ You can play the game right now, [right here](https://travancicvedran.github.io/
 ## 📃 Info
 
 Bachelor final project for FERIT.
+Made for desktop, looks best on Opera.
+Works on mobile, looks best on Chrome.
 
 
 ## 📸 Screenshots
