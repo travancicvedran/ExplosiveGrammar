@@ -257,12 +257,12 @@ body {
     width: 90%;
 
     grid-column: 1;
-    grid-row: 2 / 4;
+    grid-row: 1 / 5;
 }
 
 .dropdown-btn {
     width: 100%;
-    padding: 12px 16px;
+    padding: 1vh 16px;
     background-color: firebrick;
     color: white;
     border: none;
@@ -311,16 +311,16 @@ body {
 }
 
 .dropdown-menu.show {
-    max-height: 500px;
+    max-height: 60vh;
     opacity: 1;
     margin-top: 5px;
 }
 
 .dropdown-item {
-    padding: 12px 16px;
+    padding: 1vh 16px;
     width: 100%;
     text-align: left;
-    font-size: 1rem;
+    font-size: 2vh;
     background-color: white;
     border: none;
 
