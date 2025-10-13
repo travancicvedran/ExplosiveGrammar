@@ -80,6 +80,9 @@ body {
     grid-column: 1/span 2;
     grid-row: 1;
     width: 60%;
+    /* Wide screen support */
+    max-height: 80vh;
+    object-fit: contain;
 }
 
 .explosion {
@@ -120,8 +123,11 @@ body {
     position: relative;
     width: 100%;
     max-width: 75%;
-    height: 200px;
+    height: 8vw;
     margin: 0 auto;
+
+    max-height: 80vh;
+    object-fit: contain;
 }
 
 .wrapper1 {
