@@ -116,49 +116,36 @@ body {
 
 
 /* Buttons and fire */
-.dynamite-button-1 {
-    width: 80%;
-    grid-column: 3;
-    grid-row: 2;
-}
-
-.dynamite-button-2 {
-    width: 80%;
-    grid-column: 3;
-    grid-row: 3;
-    transform: scaleX(-1);
-}
-
-.dynamite-button-3 {
-    width: 80%;
-    grid-column: 3;
-    grid-row: 4;
-}
-
 .fire-btn-wrapper {
-    display: inline-block;
     position: relative;
+    width: 100%;
+    max-width: 75%;
+    height: 200px;
+    margin: 0 auto;
 }
 
 .wrapper1 {
     grid-column: 3;
     grid-row: 2;
-    transform: translate(-45px, 15px);
 }
 .wrapper2 {
     grid-column: 3;
     grid-row: 3;
-    transform: translate(45px, 15px);
 }
 .wrapper3 {
     grid-column: 3;
     grid-row: 4;
-    transform: translate(-45px, 15px);
 }
 
 .transparent-btn {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 1;
+    width: 90%;
+
     font-family: 'Alfa Slab One', cursive;
-    font-size: 3rem;
+    font-size: 3vw;
     letter-spacing: 1px;
     color: white;
     background: transparent;
@@ -166,10 +153,33 @@ body {
     padding: 15px 40px;
     transition: all 0.3s ease;
     text-transform: uppercase;
-    position: relative;
-    z-index: 2;
+    text-align: center;
     overflow: visible;
     user-select: none;
+}
+
+.t-btn1 {
+    transform: translate(-58%, -39%);
+}
+.t-btn2 {
+    transform: translate(-40%, -39%);
+}
+.t-btn3 {
+    transform: translate(-59%, -39%);
+}
+
+.dynamite-button {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    z-index: 0;
+}
+
+.dynamite-button-2 {
+    transform: scaleX(-1);
 }
 
 /* Reset button */
@@ -247,7 +257,7 @@ body {
     border-radius: 4px;
 
     font-family: 'Alfa Slab One', cursive;
-    font-size: 2rem;
+    font-size: 2vw;
     font-weight: 500;
 
     text-align: left;
@@ -617,7 +627,7 @@ body {
     user-select: none;
 
     font-family: 'Alfa Slab One', cursive;
-    font-size: 2.5rem;
+    font-size: 2.5vw;
     font-weight: 500;
 
     text-align: center;
@@ -775,7 +785,7 @@ body {
     font-family: "Mansalva", sans-serif;
     font-weight: 400;
     font-style: normal;
-    font-size: 200%;
+    font-size: 2vw;
 
     text-align: center;
     user-select: none;
@@ -927,7 +937,7 @@ body {
     user-select: none;
     width: auto;
     padding: 18px;
-    font-size: 1.5rem;
+    font-size: 1.5vw;
     font-weight: 1000;
     transform: translate(0, 5px);
     grid-column: 1;
@@ -939,21 +949,20 @@ body {
     display: flex;
     gap: 8px;
     background: rgba(0, 0, 0, 0.5);
-    width: 300px;
+    width: 17%;
 
     position: absolute;
     bottom: 0px;
     left: 0px;
 }
 .heart-img {
-    width: 90px;
-    height: 90px;
+    width: 5vw;
 }
 
 #quizProgress {
     font-style: normal;
     font-family: 'Alfa Slab One', cursive;
-    font-size: 2.5rem;
+    font-size: 2.5vw;
     text-align: center;
     color: white;
     user-select: none;
@@ -1034,6 +1043,7 @@ body {
     position: relative;
     z-index: 0;
     user-select: none;
+    text-align: center;
 
     grid-column: 2;
     grid-row: 2;
@@ -1054,7 +1064,7 @@ body {
 /* Credits */
 .credits {
     word-spacing: 20px;
-    font-size: 1.3 rem;
+    font-size: 1vw;
     font-family: 'Alfa Slab One', cursive;
     color: yellow;
 
@@ -1063,7 +1073,6 @@ body {
     user-select: none;
     background: maroon;
 
-    width: 180px;
     padding: 0.9em 0.6em;
     border-radius: 8px;
     border: 1px solid red;
