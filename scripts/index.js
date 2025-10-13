@@ -137,11 +137,11 @@ function updateTrophy() {
     if (!trophyImg) return;
 
     const trophySources = {
-        Tenses: "images/ui_elements/trophies/trophy_t.png",
-        Articles: "images/ui_elements/trophies/trophy_a.png",
-        Prepositions: "images/ui_elements/trophies/trophy_pre.png",
-        Conditionals: "images/ui_elements/trophies/trophy_c.png",
-        Pronouns: "images/ui_elements/trophies/trophy_pro.png"
+        Tenses: "images/ui_elements/trophies/trophy_T.png",
+        Articles: "images/ui_elements/trophies/trophy_A.png",
+        Prepositions: "images/ui_elements/trophies/trophy_Pre.png",
+        Conditionals: "images/ui_elements/trophies/trophy_C.png",
+        Pronouns: "images/ui_elements/trophies/trophy_Pro.png"
     };
 
     if (quizState.levelsUnlocked[currentCategory] === 6) {
