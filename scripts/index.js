@@ -7,17 +7,17 @@ const defaultState = {
     levelsUnlocked: { Tenses: 1, Articles: 2, Prepositions: 3, Conditionals: 5, Pronouns: 6 },
     shopItems: {
         cursors: [
-        { id: 1, name: "Red cursor", image: "/images/def_kits/red1.png", price: 0, state: "using" },
-        { id: 2, name: "Brown cursor", image: "/images/def_kits/brown1.png", price: 100, state: "buy" },
-        { id: 3, name: "Orange cursor", image: "/images/def_kits/orange1.png", price: 200, state: "buy" },
-        { id: 4, name: "Yellow cursor", image: "/images/def_kits/yellow1.png", price: 300, state: "buy" },
-        { id: 5, name: "Green cursor", image: "/images/def_kits/green1.png", price: 400, state: "buy" },
-        { id: 6, name: "Pink cursor", image: "/images/def_kits/pink1.png", price: 500, state: "buy" },
-        { id: 7, name: "Purple cursor", image: "/images/def_kits/purple1.png", price: 600, state: "buy" },
-        { id: 8, name: "Blue cursor", image: "/images/def_kits/blue1.png", price: 700, state: "buy" },
-        { id: 9, name: "Black cursor", image: "/images/def_kits/black1.png", price: 1000, state: "buy" },
-        { id: 10, name: "Rainbow cursor", image: "/images/def_kits/rainbow1.png", price: 5000, state: "buy" },
-        { id: 11, name: "Fire cursor", image: "/images/def_kits/fire1.png", price: 10000, state: "buy" },
+        { id: 1, name: "Red cursor", image: "images/def_kits/red1.png", price: 0, state: "using" },
+        { id: 2, name: "Brown cursor", image: "images/def_kits/brown1.png", price: 100, state: "buy" },
+        { id: 3, name: "Orange cursor", image: "images/def_kits/orange1.png", price: 200, state: "buy" },
+        { id: 4, name: "Yellow cursor", image: "images/def_kits/yellow1.png", price: 300, state: "buy" },
+        { id: 5, name: "Green cursor", image: "images/def_kits/green1.png", price: 400, state: "buy" },
+        { id: 6, name: "Pink cursor", image: "images/def_kits/pink1.png", price: 500, state: "buy" },
+        { id: 7, name: "Purple cursor", image: "images/def_kits/purple1.png", price: 600, state: "buy" },
+        { id: 8, name: "Blue cursor", image: "images/def_kits/blue1.png", price: 700, state: "buy" },
+        { id: 9, name: "Black cursor", image: "images/def_kits/black1.png", price: 1000, state: "buy" },
+        { id: 10, name: "Rainbow cursor", image: "images/def_kits/rainbow1.png", price: 5000, state: "buy" },
+        { id: 11, name: "Fire cursor", image: "images/def_kits/fire1.png", price: 10000, state: "buy" },
         ],
         gameplay: [
         { id: 12, name: "Extra 5 seconds", image: "images/ui_elements/plus_five.png", price: 5000, state: "buy" },
@@ -648,8 +648,8 @@ let mouseListenerSet = false;
 
 function updateCursorStyle(usingItem) {
     const cursorPrefix = usingItem.name.split(' ')[0].toLowerCase();
-    const cursorImageUrlHtml = `/images/def_kits/${cursorPrefix}1.png`;
-    const cursorImageUrlElements = `/images/def_kits/${cursorPrefix}2.png`;
+    const cursorImageUrlHtml = `images/def_kits/${cursorPrefix}1.png`;
+    const cursorImageUrlElements = `images/def_kits/${cursorPrefix}2.png`;
 
     const htmlElement = document.querySelector('html');
     htmlElement.style.cursor = `url("${cursorImageUrlHtml}"), auto`;

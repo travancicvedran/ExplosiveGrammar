@@ -6,7 +6,7 @@
 /* Document wide settings */
 html {
     /* Global cursor */
-    cursor: url("/images/def_kits/red1.png"), auto;
+    cursor: url("../images/def_kits/red1.png"), auto;
     /* Global font */
     font-family: "Inter", sans-serif;
     font-optical-sizing: auto;
@@ -17,7 +17,7 @@ html {
 
 /* Cursor for clickable content */
 a, area, button {
-    cursor: url("/images/def_kits/red2.png"), auto;
+    cursor: url("../images/def_kits/red2.png"), auto;
 }
 
 /* Disable draggin images */
@@ -35,7 +35,7 @@ body {
     so that the transition between screens is more smooth */
     min-height: 100vh;
     width: 100vw;
-    background-image: url(/images/backgrounds/game_background_full.jpg);
+    background-image: url(../images/backgrounds/game_background_full.jpg);
     background-size: cover;
     background-position: center;
 }
@@ -71,7 +71,7 @@ body {
 
 /* ########### MainMenu ########### */
 #mainMenu {
-    background-image: url(/images/backgrounds/game_background_full_blur.jpg);
+    background-image: url(../images/backgrounds/game_background_full_blur.jpg);
     grid-template-columns: 25% 40% 35%;
 }
 
@@ -603,7 +603,7 @@ body {
 
 /* ########### LevelSelection ########### */
 #levelSelection {
-    background-image: url(/images/backgrounds/game_background_full.jpg);
+    background-image: url(../images/backgrounds/game_background_full.jpg);
     grid-template-columns: 20% 20% 20% 20% 20%;
     grid-template-rows: min-content;
 }
@@ -808,19 +808,19 @@ body {
     grid-template-rows: auto;
 }
 .l1 {
-    background-image: url(/images/backgrounds/level_1.jpg);
+    background-image: url(../images/backgrounds/level_1.jpg);
 }
 .l2 {
-    background-image: url(/images/backgrounds/level_2.png);
+    background-image: url(../images/backgrounds/level_2.png);
 }
 .l3 {
-    background-image: url(/images/backgrounds/level_3.jpg);
+    background-image: url(../images/backgrounds/level_3.jpg);
 }
 .l4 {
-    background-image: url(/images/backgrounds/level_4.jpg);
+    background-image: url(../images/backgrounds/level_4.jpg);
 }
 .l5 {
-    background-image: url(/images/backgrounds/level_5.webp);
+    background-image: url(../images/backgrounds/level_5.webp);
 }
 
 #quizTitle {
@@ -1019,7 +1019,7 @@ body {
 
 /* ########### GameOver ########### */
 #gameOver {
-    background-image: url('/images/backgrounds/explosion.jpg');
+    background-image: url('../images/backgrounds/explosion.jpg');
     grid-template-columns: 1fr 1fr 1fr;
 }
 
