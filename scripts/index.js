@@ -818,3 +818,65 @@ function hideWinOverlay()     { hideOverlay('winOverlay'); }
 // ARE YOU SURE YOU WANT TO RESET ALL PROGRESS OVERLAY
 function showResetOverlay()     { showOverlay('resetOverlay'); }
 function hideResetOverlay()     { hideOverlay('resetOverlay'); }
+
+
+// Rotation checker
+function initRotationChecker() {
+    const notification = document.querySelector('.turnDeviceNotification');
+
+    function checkOrientation() {
+        // Method 1: Using window.orientation (older but widely supported)
+        if (typeof window.orientation !== 'undefined') {
+            const orientation = window.orientation;
+            
+            if (orientation === 90 || orientation === -90) {
+                notification.style.display = 'none';
+            } else {
+                notification.style.display = 'block';
+            }
+        }
+        // Method 2: Using Screen Orientation API (modern)
+        else if (window.screen && window.screen.orientation) {
+            const orientation = window.screen.orientation.type;
+            
+            if (orientation.includes('landscape')) {
+                notification.style.display = 'none';
+            } else {
+                notification.style.display = 'block';
+            }
+        }
+        // Method 3: Using window dimensions
+        else {
+            if (window.innerWidth > window.innerHeight) {
+                notification.style.display = 'none';
+            } else {
+                notification.style.display = 'block';
+            }
+        }
+    }
+
+    // Initial check
+    checkOrientation();
+
+    // Event listeners for orientation changes
+    window.addEventListener('orientationchange', checkOrientation);
+    
+    // Fallback for devices that don't support orientationchange
+    window.addEventListener('resize', function() {
+        // Throttle resize events for better performance
+        clearTimeout(this.resizeTimeout);
+        this.resizeTimeout = setTimeout(checkOrientation, 1000);
+    });
+
+    // Also listen for the modern screen orientation change
+    if (window.screen && window.screen.orientation) {
+        window.screen.orientation.addEventListener('change', checkOrientation);
+    }
+}
+
+// Initialize when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initRotationChecker);
+} else {
+    initRotationChecker();
+}

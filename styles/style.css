@@ -69,6 +69,19 @@ body {
     background-position: center;
 }
 
+/* Force portrait mode */
+.turnDeviceNotification {
+    position: fixed;
+    top: 0;
+    left:0;
+    height: 100%;
+    width: 100%;
+    display: none;
+    background-image: url(../images/rotate_phone.jpg);
+    background-size: cover;
+    z-index: 9999;
+}
+
 /* ########### MainMenu ########### */
 #mainMenu {
     background-image: url(../images/backgrounds/game_background_full_blur.jpg);
