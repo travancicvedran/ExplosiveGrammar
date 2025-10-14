@@ -498,24 +498,30 @@ function createFireParticleAt(x, y) {
 document.addEventListener('DOMContentLoaded', function() {
     const container = document.querySelector('.light-rays-container');
     const rayCount = 12;
-    const radius = 100;
-    const rayLength = 80;
-
+    const radius = 10; // Now in vw units (relative to viewport width)
+    const rayLength = 8; // Now in vw units
+    
+    // Get container dimensions for relative calculations
+    const containerRect = container.getBoundingClientRect();
+    const baseSize = Math.min(containerRect.width, containerRect.height);
+    
     for (let i = 0; i < rayCount; i++) {
         const ray = document.createElement('div');
         ray.className = 'light-ray';
-
-        ray.style.setProperty('--radius', `${radius}px`);
-
+        
         const angle = (360 / rayCount) * i;
-
+        
+        // Set CSS custom properties for relative units
+        ray.style.setProperty('--radius', `${radius}vw`);
+        ray.style.setProperty('--ray-length', `${rayLength}vw`);
+        
         ray.style.position = 'absolute';
         ray.style.left = '50%';
         ray.style.top = '50%';
-        ray.style.height = `${rayLength}px`;
-        ray.style.width = '4px';
+        ray.style.height = 'var(--ray-length)';
+        ray.style.width = '0.4vw'; // Relative width
         ray.style.transformOrigin = '50% 100%';
-        ray.style.transform = `rotate(${angle}deg) translateY(var(--radius))`;
+        ray.style.transform = `rotate(${angle}deg) translateY(calc(-1 * var(--radius)))`;
         ray.style.animationDelay = `${(i / rayCount) * -8}s`;
 
         container.appendChild(ray);
