@@ -2,9 +2,9 @@
 const defaultState = {
     allowedIncorrectGuesses: 2,     // Number of lives (hearts)
     credits: 10000,                     // In-game point system
-    levelTimeLimit: 61,             // Time limit for a level (shown)
+    levelTimeLimit: 99,             // Time limit for a level (shown)
     // Progress tracker
-    levelsUnlocked: { Tenses: 1, Articles: 2, Prepositions: 3, Conditionals: 5, Pronouns: 6 },
+    levelsUnlocked: { Tenses: 1, Articles: 1, Prepositions: 1, Conditionals: 1, Pronouns: 6 },
     shopItems: {
         cursors: [
         { id: 1, name: "Red cursor", image: "images/def_kits/red1.png", price: 0, state: "using" },

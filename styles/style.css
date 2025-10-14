@@ -935,7 +935,7 @@ body {
 
 #quizScreen #goToLevelSelection {
     margin-top: 40px;
-    margin-bottom: 20px;
+    margin-bottom: 2vh;
 
     grid-column: 2;
     grid-row: 3;
@@ -944,13 +944,14 @@ body {
 #timerWrapper {
     display: grid;
     place-items: center;
-    position: relative;
-    grid-column: 1;
-    grid-row: 1;
+    
+    position: absolute;
+    top: 0px;
+    left: 0px;
 }
 
 #clock {
-    width: 30%;
+    width: 8vw;
     grid-column: 1;
     grid-row: 1;
     margin-right: 150px;
@@ -960,10 +961,9 @@ body {
     text-align: center;
     user-select: none;
     width: auto;
-    padding: 18px;
     font-size: 1.5vw;
     font-weight: 1000;
-    transform: translate(0, 5px);
+    transform: translate(0, 0.8vh);
     grid-column: 1;
     grid-row: 1;
     margin-right: 150px;
