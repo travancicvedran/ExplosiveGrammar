@@ -5,7 +5,7 @@ const defaultState = {
     levelTimeLimit: 61,             // Time limit for a level (shown)
     creditsMultiplier: 10,
     // Progress tracker
-    levelsUnlocked: { Tenses: 1, Articles: 1, Prepositions: 1, Conditionals: 1, Pronouns: 1 },
+    levelsUnlocked: { Tenses: 1, Articles: 1, Prepositions: 1, Conditionals: 1, Pronouns: 6 },
     shopItems: {
         cursors: [
         { id: 1, name: "Red cursor", image: "images/def_kits/red1.png", price: 0, state: "using" },
@@ -149,6 +149,8 @@ function updateTrophy() {
     if (quizState.levelsUnlocked[currentCategory] === 6) {
         trophyImg.src = trophySources[currentCategory];
         trophyImg.classList.remove("hidden");
+        lightRaysCont.style.setProperty('--center-x', '59%');
+        lightRaysCont.style.setProperty('--center-y', 'calc(50% - 9vw)');
         lightRaysCont.classList.remove("hidden");
     } else {
         trophyImg.classList.add("hidden");
@@ -504,12 +506,8 @@ function createFireParticleAt(x, y) {
 document.addEventListener('DOMContentLoaded', function() {
     const container = document.querySelector('.light-rays-container');
     const rayCount = 12;
-    const radius = 10; // Now in vw units (relative to viewport width)
-    const rayLength = 8; // Now in vw units
-    
-    // Get container dimensions for relative calculations
-    const containerRect = container.getBoundingClientRect();
-    const baseSize = Math.min(containerRect.width, containerRect.height);
+    const radius = 10;
+    const rayLength = 8;
     
     for (let i = 0; i < rayCount; i++) {
         const ray = document.createElement('div');
@@ -525,7 +523,7 @@ document.addEventListener('DOMContentLoaded', function() {
         ray.style.left = '50%';
         ray.style.top = '50%';
         ray.style.height = 'var(--ray-length)';
-        ray.style.width = '0.4vw'; // Relative width
+        ray.style.width = '0.4vw';
         ray.style.transformOrigin = '50% 100%';
         ray.style.transform = `rotate(${angle}deg) translateY(calc(-1 * var(--radius)))`;
         ray.style.animationDelay = `${(i / rayCount) * -8}s`;
@@ -533,6 +531,142 @@ document.addEventListener('DOMContentLoaded', function() {
         container.appendChild(ray);
     }
 });
+
+function showPurchaseVisualization(item) {
+    // Create overlay to block clicks
+    const overlay = document.createElement('div');
+    overlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 998;
+        cursor: not-allowed;
+    `;
+    document.body.appendChild(overlay);
+
+    // Create container for the visualization
+    const vizContainer = document.createElement('div');
+    vizContainer.style.cssText = `
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 999;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    `;
+    document.body.appendChild(vizContainer);
+
+    // Create light rays container
+    const lightRaysContainer = document.createElement('div');
+    lightRaysContainer.className = 'light-rays-container';
+    lightRaysContainer.style.cssText = `
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        z-index: 1;
+        margin-left: 0%;
+        transform: translate(0, 0);
+    `;
+    vizContainer.appendChild(lightRaysContainer);
+
+    // Create and animate light rays
+    const rayCount = 12;
+    const radius = 10;
+
+    let rayLength;
+    const mediaQuery = window.matchMedia('(max-width: 768px)');
+
+    if (mediaQuery.matches) {
+        rayLength = 15; // Set for smaller screens
+    } else {
+        rayLength = 8; // Set for larger screens
+    }
+
+    for (let i = 0; i < rayCount; i++) {
+        const ray = document.createElement('div');
+        ray.className = 'light-ray';
+                
+        // Set CSS custom properties for relative units
+        ray.style.setProperty('--radius', `${radius}vw`);
+        ray.style.setProperty('--ray-length', `${rayLength}vw`);
+        
+        ray.style.position = 'absolute';
+        ray.style.left = '50%';
+        ray.style.top = '15%';
+        ray.style.height = 'var(--ray-length)';
+        ray.style.width = '0.4vw';
+        ray.style.background = 'linear-gradient(to top, rgba(255, 255, 255, 0.8), transparent)';
+        ray.style.borderRadius = '2px';
+        ray.style.transformOrigin = '50% 50%';
+        ray.style.animation = 'spin-ray 2s linear infinite';
+        ray.style.animationDelay = `${(i / rayCount) * -2}s`;
+        ray.style.boxShadow = '0 0 10px 2px rgba(255, 255, 255, 0.5)';
+
+        lightRaysContainer.appendChild(ray);
+    }
+
+    // Create item image display
+    const itemDisplay = document.createElement('div');
+    itemDisplay.style.cssText = `
+        position: relative;
+        z-index: 2;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background: rgba(255, 255, 255, 0.8);
+        padding: 30px;
+        border-radius: 15px;
+        border: 3px solid gold;
+        box-shadow: 0 0 30px rgba(255, 215, 0, 0.7);
+    `;
+    vizContainer.appendChild(itemDisplay);
+
+    // Create the item image
+    const itemImage = document.createElement('img');
+    itemImage.src = item.image;
+    itemImage.style.cssText = `
+        width: 90%;
+        height: 90%;
+        object-fit: contain;
+        margin-bottom: 15px;
+    `;
+    itemDisplay.appendChild(itemImage);
+
+    // Create purchased text
+    const purchasedText = document.createElement('div');
+    purchasedText.style.cssText = `
+        color: black;
+        font-size: 20px;
+        font-weight: bold;
+        text-align: center;
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    `;
+    purchasedText.textContent = `Purchased!`;
+    itemDisplay.appendChild(purchasedText);
+
+    // Remove click blocking after 1 second and enable close on click
+    setTimeout(() => {
+        overlay.style.cursor = 'pointer';
+        overlay.onclick = () => {
+            document.body.removeChild(overlay);
+            document.body.removeChild(vizContainer);
+        };
+        
+        // Also allow clicking the visualization itself to close
+        vizContainer.style.cursor = 'pointer';
+        vizContainer.onclick = () => {
+            document.body.removeChild(overlay);
+            document.body.removeChild(vizContainer);
+        };
+    }, 1000);
+}
 
 // Drop down menu
 const dropdownBtn = document.getElementById('dropdownBtn');
@@ -774,6 +908,8 @@ function renderItems(tab) {
                     this.dataset.state = 'use';
                     this.className = 'item-button use-btn';
                     this.textContent = 'USE';
+
+                    showPurchaseVisualization(item);
                     
                 } else {
                     const notification = document.getElementById('insufficientFunds');
