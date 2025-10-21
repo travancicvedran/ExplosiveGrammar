@@ -1,7 +1,7 @@
 // Default values of all important variables
 const defaultState = {
     allowedIncorrectGuesses: 2,     // Number of lives (hearts)
-    credits: 0,                     // In-game point system
+    credits: 1000000,                     // In-game point system
     levelTimeLimit: 61,             // Time limit for a level (shown)
     creditsMultiplier: 10,
     // Progress tracker
@@ -532,7 +532,23 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-function showPurchaseVisualization(item) {
+function getCurrentCursorUrls() {
+    const usingItem = quizState.shopItems.cursors.find(item => item.state === 'using');
+    if (!usingItem) {
+        return { htmlCursor: 'pointer', elementsCursor: 'pointer' };
+    }
+    
+    const cursorPrefix = usingItem.name.split(' ')[0].toLowerCase();
+    const cursorImageUrlHtml = `images/def_kits/${cursorPrefix}1.png`;
+    const cursorImageUrlElements = `images/def_kits/${cursorPrefix}2.png`;
+    
+    return {
+        htmlCursor: `url("${cursorImageUrlHtml}"), auto`,
+        elementsCursor: `url("${cursorImageUrlElements}"), auto`
+    };
+}
+
+function unlockNewItemVisual(item) {
     // Create overlay to block clicks
     const overlay = document.createElement('div');
     overlay.style.cssText = `
@@ -652,14 +668,16 @@ function showPurchaseVisualization(item) {
 
     // Remove click blocking after 1 second and enable close on click
     setTimeout(() => {
-        overlay.style.cursor = 'pointer';
+        const cursors = getCurrentCursorUrls();
+        
+        overlay.style.cursor = cursors.elementsCursor;
+        vizContainer.style.cursor = cursors.elementsCursor;
+        
         overlay.onclick = () => {
             document.body.removeChild(overlay);
             document.body.removeChild(vizContainer);
         };
         
-        // Also allow clicking the visualization itself to close
-        vizContainer.style.cursor = 'pointer';
         vizContainer.onclick = () => {
             document.body.removeChild(overlay);
             document.body.removeChild(vizContainer);
@@ -908,7 +926,8 @@ function renderItems(tab) {
                     this.className = 'item-button use-btn';
                     this.textContent = 'USE';
 
-                    showPurchaseVisualization(item);
+                    unlockNewItemVisual(item);
+                    play('audio/item_unlock.mp3');
                     
                 } else {
                     const notification = document.getElementById('insufficientFunds');
