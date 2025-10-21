@@ -1,7 +1,7 @@
 // Default values of all important variables
 const defaultState = {
     allowedIncorrectGuesses: 2,     // Number of lives (hearts)
-    credits: 1000000,                     // In-game point system
+    credits: 0,                     // In-game point system
     levelTimeLimit: 61,             // Time limit for a level (shown)
     creditsMultiplier: 10,
     // Progress tracker
@@ -61,6 +61,7 @@ function play(sound) {
 
 // Logic behind switching screens without refreshing the page
 function showScreen(screenId) {
+    play('audio/click.mp3');
     document.querySelectorAll('.screen').forEach(screen => screen.classList.add('hidden'));     // Hide all screens
     document.getElementById(screenId).classList.remove('hidden');                               // Show selected screen
 }
@@ -663,7 +664,7 @@ function unlockNewItemVisual(item) {
         text-align: center;
         text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
     `;
-    purchasedText.textContent = `Purchased!`;
+    purchasedText.textContent = `Item unlocked!`;
     itemDisplay.appendChild(purchasedText);
 
     // Remove click blocking after 1 second and enable close on click
@@ -745,6 +746,7 @@ document.querySelectorAll('.custom-overlay').forEach(overlay => {
 
 // SHARE OVERLAY
 function openCenteredWindow(url, width, height) {
+    play('audio/click.mp3');
     const screenWidth = window.screen.width;
     const screenHeight = window.screen.height;
     
@@ -777,7 +779,7 @@ function shareOnWhatsApp() {
     hideShareOverlay();
 }   
 
-function showShareOverlay()    { showOverlay('shareOverlay'); }
+function showShareOverlay()    { showOverlay('shareOverlay'); play('audio/click.mp3');}
 function hideShareOverlay()    { hideOverlay('shareOverlay'); }
 
 // SHOP OVERLAY
@@ -791,7 +793,7 @@ const tabs = document.querySelectorAll('.tab');
 let currentTab = 'cursors';
 renderItems(currentTab);
 
-function showShopOverlay()     { showOverlay('shopOverlay'); }
+function showShopOverlay()     { showOverlay('shopOverlay'); play('audio/click.mp3');}
 function hideShopOverlay()     { hideOverlay('shopOverlay'); }
 
 // Tab switching
@@ -988,16 +990,16 @@ function renderItems(tab) {
 }
 
 // ARE YOU SURE YOU WANT TO QUIT OVERLAY
-function showQuitOverlay()     { showOverlay('quitOverlay'); }
-function hideQuitOverlay()     { hideOverlay('quitOverlay'); }
+function showQuitOverlay()     { showOverlay('quitOverlay'); play('audio/click.mp3');}
+function hideQuitOverlay()     { hideOverlay('quitOverlay');}
 
 // YOU WIN OVERLAY
 function showWinOverlay()     { showOverlay('winOverlay'); }
 function hideWinOverlay()     { hideOverlay('winOverlay'); }
 
 // ARE YOU SURE YOU WANT TO RESET ALL PROGRESS OVERLAY
-function showResetOverlay()     { showOverlay('resetOverlay'); }
-function hideResetOverlay()     { hideOverlay('resetOverlay'); }
+function showResetOverlay()     { showOverlay('resetOverlay'); play('audio/click.mp3');}
+function hideResetOverlay()     { hideOverlay('resetOverlay'); play('audio/click.mp3');}
 
 
 // Rotation checker
