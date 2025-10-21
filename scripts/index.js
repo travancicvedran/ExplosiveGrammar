@@ -1,8 +1,9 @@
 // Default values of all important variables
 const defaultState = {
     allowedIncorrectGuesses: 2,     // Number of lives (hearts)
-    credits: 0,                     // In-game point system
+    credits: 10000,                     // In-game point system
     levelTimeLimit: 61,             // Time limit for a level (shown)
+    creditsMultiplier: 10,
     // Progress tracker
     levelsUnlocked: { Tenses: 1, Articles: 1, Prepositions: 1, Conditionals: 1, Pronouns: 1 },
     shopItems: {
@@ -22,6 +23,7 @@ const defaultState = {
         gameplay: [
         { id: 12, name: "Extra 5 seconds", image: "images/ui_elements/plus_five.png", price: 5000, state: "buy" },
         { id: 13, name: "Extra life", image: "images/ui_elements/plus_heart.png", price: 10000, state: "buy" },
+        { id: 14, name: "Double credits", image: "images/ui_elements/double_credits.png", price: 10000, state: "buy" },
         ]
     }
 };
@@ -315,6 +317,10 @@ function startQuestionTimer() {
 let unlockNewLevelFlag = false;
 const questionsPerLevel = 5;
 
+function calculateCredits(questionTimeLeft) {
+    quizState.credits += questionTimeLeft * quizState.creditsMultiplier;
+}
+
 function submitAnswer(selectedOption, buttonElement) {
     const questionData = shuffledQuestions[currentQuestionIndex];
 
@@ -323,7 +329,7 @@ function submitAnswer(selectedOption, buttonElement) {
     if (selectedOption === questionData.answer) {
         buttonElement.classList.add('correct');
         play('audio/correct_answer.mp3');
-        quizState.credits += questionTimeLeft * 10;
+        calculateCredits(questionTimeLeft);
         currentQuestionIndex++;
         saveState(quizState);
     } else {
@@ -706,6 +712,14 @@ function toggleExtraLife() {
     saveState(quizState);
 }
 
+function toggleDoubleCredits() {
+    if (quizState.creditsMultiplier == 10)
+        quizState.creditsMultiplier = 20;
+    else
+        quizState.creditsMultiplier = 10;
+    saveState(quizState);
+}
+
 updateCursorStyle(quizState.shopItems.cursors.find(item => item.state === 'using'))
 
 // Render items for the current tab
@@ -793,6 +807,9 @@ function renderItems(tab) {
                     else if (itemId === 13) {
                         toggleExtraLife();
                     }
+                    else if (itemId === 14) {
+                        toggleDoubleCredits();
+                    }
                 }
             } else if (currentState === 'using') {
                 if (tab === 'gameplay') {
@@ -805,6 +822,9 @@ function renderItems(tab) {
                     } 
                     else if (itemId === 13) {
                         toggleExtraLife();
+                    }
+                    else if (itemId === 14) {
+                        toggleDoubleCredits();
                     }
                 }
             }
