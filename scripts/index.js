@@ -1350,3 +1350,60 @@ if (document.readyState === 'loading') {
 } else {
     initRotationChecker();
 }
+
+// Add dev secret for rapid clicks on quiz title
+let clickCount = 0;
+let clickTimer = null;
+
+document.getElementById('logoImg').addEventListener('click', function() {
+    clickCount++;
+    
+    // Clear existing timer
+    if (clickTimer) {
+        clearTimeout(clickTimer);
+    }
+    
+    // Set new timer to reset count after 3 seconds
+    clickTimer = setTimeout(() => {
+        clickCount = 0;
+    }, 3000);
+    
+    // Check if we reached 5 clicks
+    if (clickCount >= 5) {
+        // Add lots of credits
+        quizState.credits += 100000;
+        
+        // Save state and update UI
+        saveState(quizState);
+        renderCredits();
+        
+        // Reset counter
+        clickCount = 0;
+        
+        // Optional: Show a secret notification
+        console.log("Dev secret activated! +100,000 credits!");
+        
+        // You could also show a visual notification here
+        const notification = document.createElement('div');
+        notification.textContent = '💰 Dev Secret: +100,000 credits! 💰';
+        notification.style.cssText = `
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: gold;
+            color: black;
+            padding: 20px;
+            border-radius: 10px;
+            font-size: 24px;
+            font-weight: bold;
+            z-index: 10000;
+            box-shadow: 0 0 20px rgba(255,215,0,0.8);
+        `;
+        document.body.appendChild(notification);
+        
+        setTimeout(() => {
+            document.body.removeChild(notification);
+        }, 3000);
+    }
+});
