@@ -8,22 +8,23 @@ const defaultState = {
     levelsUnlocked: { Tenses: 1, Articles: 1, Prepositions: 1, Conditionals: 1, Pronouns: 1 },
     shopItems: {
         cursors: [
-        { id: 1, name: "Red cursor", image: "images/def_kits/red1.png", price: 0, state: "using" },
-        { id: 2, name: "Brown cursor", image: "images/def_kits/brown1.png", price: 100, state: "buy" },
-        { id: 3, name: "Orange cursor", image: "images/def_kits/orange1.png", price: 200, state: "buy" },
-        { id: 4, name: "Yellow cursor", image: "images/def_kits/yellow1.png", price: 300, state: "buy" },
-        { id: 5, name: "Green cursor", image: "images/def_kits/green1.png", price: 400, state: "buy" },
-        { id: 6, name: "Pink cursor", image: "images/def_kits/pink1.png", price: 500, state: "buy" },
-        { id: 7, name: "Purple cursor", image: "images/def_kits/purple1.png", price: 600, state: "buy" },
-        { id: 8, name: "Blue cursor", image: "images/def_kits/blue1.png", price: 700, state: "buy" },
-        { id: 9, name: "Black cursor", image: "images/def_kits/black1.png", price: 1000, state: "buy" },
-        { id: 10, name: "Rainbow cursor", image: "images/def_kits/rainbow1.png", price: 5000, state: "buy" },
-        { id: 11, name: "Fire cursor", image: "images/def_kits/fire1.png", price: 10000, state: "buy" },
+        { id: 1, name: "Red cursor", image: "images/def_kits/red1.png", price: 0, state: "using", tier: 0 },
+        { id: 2, name: "Brown cursor", image: "images/def_kits/brown1.png", price: 100, state: "buy", tier: 1 },
+        { id: 3, name: "Orange cursor", image: "images/def_kits/orange1.png", price: 200, state: "buy", tier: 1 },
+        { id: 4, name: "Yellow cursor", image: "images/def_kits/yellow1.png", price: 300, state: "buy", tier: 1 },
+        { id: 5, name: "Green cursor", image: "images/def_kits/green1.png", price: 400, state: "buy", tier: 1 },
+        { id: 6, name: "Pink cursor", image: "images/def_kits/pink1.png", price: 500, state: "buy", tier: 1 },
+        { id: 7, name: "Purple cursor", image: "images/def_kits/purple1.png", price: 1000, state: "buy", tier: 2 },
+        { id: 8, name: "Blue cursor", image: "images/def_kits/blue1.png", price: 1500, state: "buy", tier: 2 },
+        { id: 9, name: "Black cursor", image: "images/def_kits/black1.png", price: 2500, state: "buy", tier: 2 },
+        { id: 10, name: "Rainbow cursor", image: "images/def_kits/rainbow1.png", price: 5000, state: "buy", tier: 3 },
+        { id: 11, name: "Fire cursor", image: "images/def_kits/fire1.png", price: 10000, state: "buy", tier: 4 },
         ],
         gameplay: [
-        { id: 12, name: "Extra 5 seconds", image: "images/ui_elements/plus_five.png", price: 5000, state: "buy" },
-        { id: 13, name: "Extra life", image: "images/ui_elements/plus_heart.png", price: 10000, state: "buy" },
-        { id: 14, name: "Double credits", image: "images/ui_elements/double_credits.png", price: 10000, state: "buy" },
+        { id: 12, name: "Extra 5 seconds", image: "images/ui_elements/plus_five.png", price: 5000, state: "buy", tier: 3 },
+        { id: 13, name: "Extra life", image: "images/ui_elements/plus_heart.png", price: 10000, state: "buy", tier: 4 },
+        { id: 14, name: "Double credits", image: "images/ui_elements/double_credits.png", price: 10000, state: "buy", tier: 4 },
+        { id: 15, name: "Get a random item", image: "images/ui_elements/gambling.png", price: 1000, state: "buy", tier: 0 },
         ]
     }
 };
@@ -53,10 +54,38 @@ function resetAllProgress(){
     hideResetOverlay();
 }
 
-// Function for playing sound
+// Functions for playing sound
+let activeAudios = [];
+
 function play(sound) {
     var audio = new Audio(sound);
     audio.play();
+    activeAudios.push(audio);
+    
+    // Remove from array when audio ends naturally
+    audio.addEventListener('ended', function() {
+        const index = activeAudios.indexOf(audio);
+        if (index > -1) {
+            activeAudios.splice(index, 1);
+        }
+    });
+}
+
+function stopAllAudios() {
+    // Stop all active audio objects
+    activeAudios.forEach(audio => {
+        audio.pause();
+        audio.currentTime = 0;
+    });
+    
+    activeAudios = [];
+    
+    // Also stop any audio elements in the DOM for good measure
+    const audioElements = document.querySelectorAll('audio');
+    audioElements.forEach(audio => {
+        audio.pause();
+        audio.currentTime = 0;
+    });
 }
 
 // Logic behind switching screens without refreshing the page
@@ -639,7 +668,7 @@ function unlockNewItemVisual(item) {
         background: rgba(255, 255, 255, 0.8);
         padding: 30px;
         border-radius: 15px;
-        border: 3px solid gold;
+        border: 3px solid black;
         box-shadow: 0 0 30px rgba(255, 215, 0, 0.7);
     `;
     vizContainer.appendChild(itemDisplay);
@@ -873,6 +902,261 @@ function toggleDoubleCredits() {
     saveState(quizState);
 }
 
+function showUnlockAnimation(unlockedItem) {
+    // Create overlay
+    const overlay = document.createElement('div');
+    overlay.style.cssText = `
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    `;
+
+    // Create viewport container
+    const viewport = document.createElement('div');
+    viewport.style.cssText = `
+        width: min(90vw, 1000px);
+        height: min(18vw, 200px);
+        overflow: hidden;
+        position: relative;
+        border: 3px solid black;
+        border-radius: 10px;
+        background: white;
+    `;
+
+     // Add pointing indicators using symbols
+    const topIndicator = document.createElement('div');
+    topIndicator.style.cssText = `
+        position: absolute;
+        top: 0px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 20px;
+        color: black;
+        z-index: 1001;
+        text-shadow: 0 0 5px black;
+    `;
+    topIndicator.textContent = '▼';
+
+    const bottomIndicator = document.createElement('div');
+    bottomIndicator.style.cssText = `
+        position: absolute;
+        bottom: 0px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 20px;
+        color: black;
+        z-index: 1001;
+        text-shadow: 0 0 5px black;
+    `;
+    bottomIndicator.textContent = '▲';
+
+    viewport.appendChild(topIndicator);
+    viewport.appendChild(bottomIndicator);
+
+    // Create scrolling container
+    const scrollContainer = document.createElement('div');
+    scrollContainer.style.cssText = `
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: flex;
+        flex-direction: row;
+        transition-timing-function: cubic-bezier(0.1, 0.8, 0.2, 1);
+    `;
+
+    // Get all eligible items for the animation
+    const allEligibleItems = [
+        ...quizState.shopItems.cursors.filter(item => item.id !== 1),
+        ...quizState.shopItems.gameplay.filter(item => item.id !== 15)
+    ];
+
+    const totalItems = 50;
+
+    overlay.appendChild(viewport);
+    document.body.appendChild(overlay);
+
+    const itemSize = Math.floor(viewport.offsetWidth / 5);
+    viewport.style.width = `${itemSize * 5}px`;
+
+    function getTierBorderColor(tier) {
+        switch(tier) {
+            case 1: return 'lightgrey';
+            case 2: return 'blue';
+            case 3: return 'yellow';
+            case 4: return 'red';
+            default: return 'lightgrey';
+        }
+    }
+    
+    for (let i = 0; i < totalItems; i++) {
+        const itemElement = document.createElement('div');
+
+        let currentItem;
+        if (i === (totalItems - 2 - 1)) {
+            currentItem = unlockedItem;
+        } else {
+            currentItem = allEligibleItems[Math.floor(Math.random() * allEligibleItems.length)];
+        }
+        
+        const borderColor = getTierBorderColor(currentItem.tier);
+
+        itemElement.style.cssText = `
+            width: ${itemSize}px;
+            height: ${itemSize}px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-sizing: border-box;
+            flex-shrink: 0;
+        `;
+        
+        // Create image wrapper for the circular border
+        const imageWrapper = document.createElement('div');
+        imageWrapper.style.cssText = `
+            width: ${itemSize * 0.8}px;
+            height: ${itemSize * 0.8}px;
+            border: 2px solid ${borderColor};
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: ${itemSize * 0.1}px;
+            box-sizing: border-box;
+        `;
+        
+        const img = document.createElement('img');
+        
+        if (i === (totalItems - 2 - 1)) {
+            img.src = unlockedItem.image;
+            img.alt = unlockedItem.name;
+        } else {
+            img.src = currentItem.image;
+            img.alt = currentItem.name;
+        }
+        
+        img.style.cssText = `
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            display: block;
+        `;
+        
+        imageWrapper.appendChild(img);
+        itemElement.appendChild(imageWrapper);
+        scrollContainer.appendChild(itemElement);
+    }
+
+    const targetPosition = -(47 - 2) * itemSize;
+
+    viewport.appendChild(scrollContainer);
+
+    let skipFlag = false;
+    // Start the animation
+    requestAnimationFrame(() => {
+        // Initial stop
+        play('audio/unlocking_random_item.mp3');
+        // Then slower scroll to final position
+        setTimeout(() => {
+            scrollContainer.style.transition = 'transform 5s cubic-bezier(0.1, 0.3, 0.2, 1)';
+            scrollContainer.style.transform = `translateX(${targetPosition}px)`;
+            
+            setTimeout(() => {
+                if (!skipFlag) {
+                    unlockNewItemVisual(unlockedItem);
+                    play('audio/item_unlock.mp3');
+                    renderItems('gameplay');
+                    document.body.removeChild(overlay);
+                }
+                else {
+                    skipFlag = false;
+                }
+            }, 5500); // Wait for scroll to complete
+        }, 1000); // Initial fast scroll duration
+    });
+
+    // Allow clicking outside to close (optional)
+    overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) {
+            stopAllAudios();
+            unlockNewItemVisual(unlockedItem);
+            play('audio/item_unlock.mp3');
+            renderItems('gameplay');
+            skipFlag = true;
+            document.body.removeChild(overlay);
+        }
+    });
+}
+
+function unlockRandomItem() {
+    const allEligibleItems = [
+        ...quizState.shopItems.cursors.filter(item => item.id !== 1 && item.id !== 15),
+        ...quizState.shopItems.gameplay.filter(item => item.id !== 1 && item.id !== 15)
+    ];
+    
+    if (allEligibleItems.length === 0) {
+        console.log("No eligible items found!");
+        return null;
+    }
+    
+    // Calculate weights based on inverse of price
+    const weightedItems = allEligibleItems.map(item => {
+        const weight = 1 / item.price;
+        return { ...item, weight };
+    });
+    // Calculate total weight for normalization
+    const totalWeight = weightedItems.reduce((sum, item) => sum + item.weight, 0);
+    // Generate random number between 0 and totalWeight
+    let random = Math.random() * totalWeight;
+    // Select item based on weighted probability
+    let selectedItem = null;
+    for (const item of weightedItems) {
+        random -= item.weight;
+        if (random <= 0) {
+            selectedItem = item;
+            break;
+        }
+    }
+    
+    // Fallback in case of floating point issues
+    if (!selectedItem) {
+        selectedItem = weightedItems[weightedItems.length - 1];
+    }
+    
+    let foundItem = null;
+    
+    // Search in cursors
+    for (let item of quizState.shopItems.cursors) {
+        if (item.id === selectedItem.id) {
+            item.state = "use";
+            foundItem = item;
+            break;
+        }
+    }
+    // If not found in cursors, search in gameplay
+    if (!foundItem) {
+        for (let item of quizState.shopItems.gameplay) {
+            if (item.id === selectedItem.id) {
+                item.state = "use";
+                foundItem = item;
+                break;
+            }
+        }
+    }
+    
+    if (foundItem) {
+        showUnlockAnimation(foundItem);
+        saveState(quizState);
+    }
+}
+
 updateCursorStyle(quizState.shopItems.cursors.find(item => item.state === 'using'))
 
 // Render items for the current tab
@@ -922,15 +1206,19 @@ function renderItems(tab) {
                 if (quizState.credits >= item.price) {
                     quizState.credits -= item.price;
                     renderCredits();
-                    
-                    item.state = 'use';
-                    this.dataset.state = 'use';
-                    this.className = 'item-button use-btn';
-                    this.textContent = 'USE';
 
-                    unlockNewItemVisual(item);
-                    play('audio/item_unlock.mp3');
-                    
+                    if (itemId === 15) {
+                        unlockRandomItem();
+                    }
+                    else {
+                        item.state = 'use';
+                        this.dataset.state = 'use';
+                        this.className = 'item-button use-btn';
+                        this.textContent = 'USE';
+
+                        unlockNewItemVisual(item);
+                        play('audio/item_unlock.mp3');
+                    }
                 } else {
                     const notification = document.getElementById('insufficientFunds');
                     notification.style.display = 'block';
@@ -951,8 +1239,8 @@ function renderItems(tab) {
                     // Update all cursor buttons and the cursor itself
                     renderItems(tab)
                     updateCursorStyle(quizState.shopItems.cursors.find(item => item.state === 'using'))
-                } else {
-                    // For gameplay: Toggle this item between use/using
+                } else if (itemId != 15) {
+                    // For gameplay: Toggle this item between use/using unless gambling
                     item.state = 'using';
                     this.dataset.state = 'using';
                     this.className = 'item-button using-btn';
