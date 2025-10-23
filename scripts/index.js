@@ -953,7 +953,7 @@ function getTierBorderColor(tier) {
         case 1: return 'whitesmoke';
         case 2: return 'blue';
         case 3: return 'fuchsia';
-        case 4: return 'yellow';
+        case 4: return 'goldenrod';
         default: return 'whitesmoke';
     }
 }
@@ -1066,7 +1066,7 @@ function showUnlockAnimation(unlockedItem) {
         
         // Create image wrapper for the circular border
         const imageWrapper = document.createElement('div');
-        imageWrapper.style.cssText = `
+        let wrapperStyle = `
             width: ${itemSize * 0.8}px;
             height: ${itemSize * 0.8}px;
             border: 2px solid ${borderColor};
@@ -1077,6 +1077,13 @@ function showUnlockAnimation(unlockedItem) {
             padding: ${itemSize * 0.1}px;
             box-sizing: border-box;
         `;
+        
+        // Add background color only for tier 4 items
+        if (currentItem.tier === 4) {
+            wrapperStyle += `background-color: #fff5ceff;`;
+        }
+        
+        imageWrapper.style.cssText = wrapperStyle;
         
         const img = document.createElement('img');
         
