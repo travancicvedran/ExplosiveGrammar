@@ -587,9 +587,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
 function getCurrentCursorUrls() {
     const usingItem = quizState.shopItems.cursors.find(item => item.state === 'using');
-    if (!usingItem) {
-        return { htmlCursor: 'pointer', elementsCursor: 'pointer' };
-    }
     
     const cursorPrefix = usingItem.name.split(' ')[0].toLowerCase();
     const cursorImageUrlHtml = `images/def_kits/${cursorPrefix}1.png`;
