@@ -12,19 +12,23 @@ const defaultState = {
         { id: 2, name: "Brown cursor", image: "images/def_kits/brown1.png", price: 100, state: "buy", tier: 1 },
         { id: 3, name: "Orange cursor", image: "images/def_kits/orange1.png", price: 200, state: "buy", tier: 1 },
         { id: 4, name: "Yellow cursor", image: "images/def_kits/yellow1.png", price: 300, state: "buy", tier: 1 },
-        { id: 5, name: "Green cursor", image: "images/def_kits/green1.png", price: 400, state: "buy", tier: 1 },
+        { id: 5, name: "Beige cursor", image: "images/def_kits/beige1.png", price: 400, state: "buy", tier: 1 },
         { id: 6, name: "Pink cursor", image: "images/def_kits/pink1.png", price: 500, state: "buy", tier: 1 },
-        { id: 7, name: "Purple cursor", image: "images/def_kits/purple1.png", price: 1000, state: "buy", tier: 2 },
-        { id: 8, name: "Blue cursor", image: "images/def_kits/blue1.png", price: 1500, state: "buy", tier: 2 },
-        { id: 9, name: "Black cursor", image: "images/def_kits/black1.png", price: 2500, state: "buy", tier: 2 },
-        { id: 10, name: "Rainbow cursor", image: "images/def_kits/rainbow1.png", price: 5000, state: "buy", tier: 3 },
-        { id: 11, name: "Fire cursor", image: "images/def_kits/fire1.png", price: 10000, state: "buy", tier: 4 },
+        { id: 7, name: "Magenta cursor", image: "images/def_kits/magenta1.png", price: 1000, state: "buy", tier: 1 },
+        { id: 8, name: "Purple cursor", image: "images/def_kits/purple1.png", price: 1500, state: "buy", tier: 2 },
+        { id: 9, name: "Blue cursor", image: "images/def_kits/blue1.png", price: 2000, state: "buy", tier: 2 },
+        { id: 10, name: "Green cursor", image: "images/def_kits/green1.png", price: 2500, state: "buy", tier: 2 },
+        { id: 11, name: "Black cursor", image: "images/def_kits/black1.png", price: 3000, state: "buy", tier: 2 },
+        { id: 12, name: "Gray cursor", image: "images/def_kits/gray1.png", price: 3500, state: "buy", tier: 2 },
+        { id: 13, name: "Rainbow cursor", image: "images/def_kits/rainbow1.png", price: 5000, state: "buy", tier: 3 },
+        { id: 14, name: "Toxic cursor", image: "images/def_kits/toxic1.png", price: 7500, state: "buy", tier: 3 },
+        { id: 15, name: "Fire cursor", image: "images/def_kits/fire1.png", price: 10000, state: "buy", tier: 4 },
         ],
         gameplay: [
-        { id: 12, name: "Extra 5 seconds", image: "images/ui_elements/plus_five.png", price: 5000, state: "buy", tier: 3 },
-        { id: 13, name: "Extra life", image: "images/ui_elements/plus_heart.png", price: 10000, state: "buy", tier: 4 },
-        { id: 14, name: "Double credits", image: "images/ui_elements/double_credits.png", price: 10000, state: "buy", tier: 4 },
-        { id: 15, name: "Get a random item", image: "images/ui_elements/gambling.png", price: 1000, state: "buy", tier: 0 },
+        { id: 90, name: "Extra 5 seconds", image: "images/ui_elements/plus_five.png", price: 5000, state: "buy", tier: 3 },
+        { id: 91, name: "Extra life", image: "images/ui_elements/plus_heart.png", price: 10000, state: "buy", tier: 4 },
+        { id: 92, name: "Double credits", image: "images/ui_elements/double_credits.png", price: 10000, state: "buy", tier: 4 },
+        { id: 93, name: "Get a random item", image: "images/ui_elements/gambling.png", price: 500, state: "buy", tier: 0 },
         ]
     }
 };
@@ -532,6 +536,25 @@ function createFireParticleAt(x, y) {
     setTimeout(() => particle.remove(), (duration + delay) * 1000 + 100);
 }
 
+function createToxicParticleAt(x, y) {
+    const particle = document.createElement('div');
+    particle.classList.add('toxic-particle', 'toxic-trail');
+    const size = 10 + Math.random() * 10;
+    particle.style.width = `${size}px`;
+    particle.style.height = `${size}px`;
+    particle.style.left = `${x - size/2}px`;
+    particle.style.top = `${y - size/2}px`;
+    particle.style.background = `radial-gradient(ellipse at center, #2dac1cff 0%, #0e6d26ff 70%, transparent 100%)`;
+    const duration = 0.8 + Math.random() * 0.5;
+    particle.style.animationDuration = `${duration}s`;
+    document.body.appendChild(particle);
+    setTimeout(() => {
+        if (particle.parentNode) {
+            particle.parentNode.removeChild(particle);
+        }
+    }, duration * 1000);
+}
+
 // Light rays animation
 document.addEventListener('DOMContentLoaded', function() {
     const container = document.querySelector('.light-rays-container');
@@ -836,9 +859,11 @@ tabs.forEach(tab => {
 });
 
 let fireInterval = null;
+let toxicInterval = null;
+let fireEnabled = false;
+let toxicEnabled = false;
 let mouseX = window.innerWidth / 2;
 let mouseY = window.innerHeight / 2;
-let mouseListenerSet = false;
 
 function updateCursorStyle(usingItem) {
     const cursorPrefix = usingItem.name.split(' ')[0].toLowerCase();
@@ -857,19 +882,25 @@ function updateCursorStyle(usingItem) {
         clearInterval(fireInterval);
         fireInterval = null;
     }
-
     if (cursorPrefix === "fire") {
         turnOnFireCursor();
     }
+    if (toxicInterval) {
+        clearInterval(toxicInterval);
+        toxicInterval = null;
+    }
+    if (cursorPrefix === "toxic") {
+        turnOnToxicCursor();
+    } 
 }
 
 function turnOnFireCursor(){
-    if (!mouseListenerSet) {
+    if (!fireEnabled) {
         document.addEventListener('mousemove', function(e) {
             mouseX = e.clientX;
             mouseY = e.clientY;
         });
-        mouseListenerSet = true;
+        fireEnabled = true;
     }
     if (fireInterval) clearInterval(fireInterval);
 
@@ -878,11 +909,26 @@ function turnOnFireCursor(){
     }, 100);
 }
 
+function turnOnToxicCursor() {
+    if (!toxicEnabled) {
+        document.addEventListener('mousemove', function(e) {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+        toxicEnabled = true;
+    }
+    if (toxicInterval) clearInterval(toxicInterval);
+
+    toxicInterval = setInterval(() => {
+        createToxicParticleAt(mouseX, mouseY);
+    }, 50);
+}
+
 function toggleFiveExtraSeconds() {
-    if (quizState.levelTimeLimit == 60)
-        quizState.levelTimeLimit = 65;
+    if (quizState.levelTimeLimit == 61)
+        quizState.levelTimeLimit = 66;
     else
-        quizState.levelTimeLimit = 60;
+        quizState.levelTimeLimit = 61;
     saveState(quizState);
 }
 
@@ -900,6 +946,16 @@ function toggleDoubleCredits() {
     else
         quizState.creditsMultiplier = 10;
     saveState(quizState);
+}
+
+function getTierBorderColor(tier) {
+    switch(tier) {
+        case 1: return 'whitesmoke';
+        case 2: return 'blue';
+        case 3: return 'fuchsia';
+        case 4: return 'yellow';
+        default: return 'whitesmoke';
+    }
 }
 
 function showUnlockAnimation(unlockedItem) {
@@ -975,7 +1031,7 @@ function showUnlockAnimation(unlockedItem) {
     // Get all eligible items for the animation
     const allEligibleItems = [
         ...quizState.shopItems.cursors.filter(item => item.id !== 1),
-        ...quizState.shopItems.gameplay.filter(item => item.id !== 15)
+        ...quizState.shopItems.gameplay.filter(item => item.id !== 93)
     ];
 
     const totalItems = 50;
@@ -985,16 +1041,6 @@ function showUnlockAnimation(unlockedItem) {
 
     const itemSize = Math.floor(viewport.offsetWidth / 5);
     viewport.style.width = `${itemSize * 5}px`;
-
-    function getTierBorderColor(tier) {
-        switch(tier) {
-            case 1: return 'lightgrey';
-            case 2: return 'blue';
-            case 3: return 'yellow';
-            case 4: return 'red';
-            default: return 'lightgrey';
-        }
-    }
     
     for (let i = 0; i < totalItems; i++) {
         const itemElement = document.createElement('div');
@@ -1097,8 +1143,8 @@ function showUnlockAnimation(unlockedItem) {
 
 function unlockRandomItem() {
     const allEligibleItems = [
-        ...quizState.shopItems.cursors.filter(item => item.id !== 1 && item.id !== 15),
-        ...quizState.shopItems.gameplay.filter(item => item.id !== 1 && item.id !== 15)
+        ...quizState.shopItems.cursors.filter(item => item.id !== 1 && item.id !== 93),
+        ...quizState.shopItems.gameplay.filter(item => item.id !== 1 && item.id !== 93)
     ];
     
     if (allEligibleItems.length === 0) {
@@ -1182,9 +1228,11 @@ function renderItems(tab) {
                 break;
         }
         
+        const borderColor = getTierBorderColor(item.tier);
+
         itemCard.innerHTML = `
             <h3 class="item-title">${item.name}</h3>
-            <img src="${item.image}" alt="${item.name}" class="item-image">
+            <img src="${item.image}" alt="${item.name}" class="item-image" style="border-color: ${borderColor}">
             <button class="item-button ${buttonClass}" 
                     data-id="${item.id}" 
                     data-state="${item.state}">
@@ -1207,7 +1255,7 @@ function renderItems(tab) {
                     quizState.credits -= item.price;
                     renderCredits();
 
-                    if (itemId === 15) {
+                    if (itemId === 93) {
                         unlockRandomItem();
                     }
                     else {
@@ -1239,19 +1287,19 @@ function renderItems(tab) {
                     // Update all cursor buttons and the cursor itself
                     renderItems(tab)
                     updateCursorStyle(quizState.shopItems.cursors.find(item => item.state === 'using'))
-                } else if (itemId != 15) {
+                } else if (itemId != 93) {
                     // For gameplay: Toggle this item between use/using unless gambling
                     item.state = 'using';
                     this.dataset.state = 'using';
                     this.className = 'item-button using-btn';
                     this.textContent = 'USING';
-                    if (itemId === 12) {
+                    if (itemId === 90) {
                         toggleFiveExtraSeconds();
                     } 
-                    else if (itemId === 13) {
+                    else if (itemId === 91) {
                         toggleExtraLife();
                     }
-                    else if (itemId === 14) {
+                    else if (itemId === 92) {
                         toggleDoubleCredits();
                     }
                 }
@@ -1261,13 +1309,13 @@ function renderItems(tab) {
                     this.dataset.state = 'use';
                     this.className = 'item-button use-btn';
                     this.textContent = `USE`;
-                    if (itemId === 12) {
+                    if (itemId === 90) {
                         toggleFiveExtraSeconds();
                     } 
-                    else if (itemId === 13) {
+                    else if (itemId === 91) {
                         toggleExtraLife();
                     }
-                    else if (itemId === 14) {
+                    else if (itemId === 92) {
                         toggleDoubleCredits();
                     }
                 }
@@ -1358,32 +1406,22 @@ let clickTimer = null;
 document.getElementById('logoImg').addEventListener('click', function() {
     clickCount++;
     
-    // Clear existing timer
     if (clickTimer) {
         clearTimeout(clickTimer);
     }
     
-    // Set new timer to reset count after 3 seconds
     clickTimer = setTimeout(() => {
         clickCount = 0;
     }, 3000);
     
-    // Check if we reached 5 clicks
     if (clickCount >= 5) {
-        // Add lots of credits
+        play('audio/item_unlock.mp3');
         quizState.credits += 100000;
-        
-        // Save state and update UI
         saveState(quizState);
         renderCredits();
         
-        // Reset counter
         clickCount = 0;
         
-        // Optional: Show a secret notification
-        console.log("Dev secret activated! +100,000 credits!");
-        
-        // You could also show a visual notification here
         const notification = document.createElement('div');
         notification.textContent = '💰 Dev Secret: +100,000 credits! 💰';
         notification.style.cssText = `
